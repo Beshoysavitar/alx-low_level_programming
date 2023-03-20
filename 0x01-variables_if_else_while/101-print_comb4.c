@@ -16,7 +16,7 @@ int main(void)
 	{
 		for (x2 = x1 + 1 ; x2 < 9; x2++)
 		{
-			for (x3 = x1 + 2 ; x3 < 10; x3++)
+			for (x3 = x2 + 1 ; x3 < 10; x3++)
 			{
 				putchar(x1 % 10 + '0');
 				putchar(x2 % 10 + '0');
