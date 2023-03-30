@@ -1,0 +1,20 @@
+#include "main.h"
+/**
+ * puts_half - prints half of a string
+ * @str: char to check
+ *
+ * Return: 0 is success
+ */
+void puts_half(char *str)
+{
+	int i = 0, j;
+
+	for (i = 0; str[i] != '\0'; i++)
+		j = (i / 2) + 1;
+	while (str[j] != '\0')
+	{
+		_putchar(str[j]);
+		j++;
+	}
+	_putchar('\n');
+}
