@@ -4,23 +4,28 @@
  * Description: function that concatenates two strings.
  * @dest: string 1
  * @src: string 2
- * Return: Always (0)
+ * Return: Always (dest)
  */
 char *_strcat(char *dest, char *src)
 {
 	int i = 0, j = 0;
+	char *s = dest;
 
 	while (dest[i] != '\0')
 	{
-		printf("%c", dest[i]);
+		s[j] = dest[i];
 		i++;
-	}
-
-	while (src[j] != '\0')
-	{
-		printf("%c", src[j]);
 		j++;
 	}
-	printf("\n");
-	return (0);
+	i = 0;
+
+	while (src[i] != '\0')
+	{
+		s[j] = src[i];
+		i++;
+		j++;
+	}
+	s[j] = '\0';
+
+	return (dest);
 }
