@@ -14,7 +14,7 @@ int main(int argc, char *argv)
 	char *a;
 
 	while (--argc)
-	{i
+	{
 		for (a = argv[argc]; *a; a++)
 		{
 			if (*a < '0' || *a > '9')
