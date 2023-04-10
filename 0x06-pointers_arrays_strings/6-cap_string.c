@@ -8,7 +8,7 @@
 char *cap_string(char *s)
 {
 	int i, q;
-	char sep[] = " \t\n,;.!?\"(){}";
+	char sep[] = "\t \n,;.!?\"(){}";
 
 	for (i = 0; s[i] != '\0'; i++)
 	{
@@ -16,19 +16,16 @@ char *cap_string(char *s)
 		{
 			if ((s[i] >= 'a' && s[i] <= 'z'))
 				s[i] -= 32;
-			continue;
 		}
 		for (q = 0; q < 12; q++)
 		{
 			if (s[i] == sep[q])
 			{
 				i++;
-
+	
 				if ((s[i] >= 'a' && s[i] <= 'z'))
-				{
 					s[i] -= 32;
-					continue;
-				}
+				q = 0;
 			}
 		}
 	}
