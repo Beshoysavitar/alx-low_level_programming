@@ -8,13 +8,13 @@
  *
  * Return: 0
  */
-int main(int argc, char **argv)
+int main(int argc, char *argv)
 {
 	int sum = 0;
 	char *a;
 
 	while (--argc)
-	{
+	{i
 		for (a = argv[argc]; *a; a++)
 		{
 			if (*a < '0' || *a > '9')
@@ -22,8 +22,8 @@ int main(int argc, char **argv)
 				printf("Error\n");
 				return (1);
 			}
-			sum += atoi(argv[argc]);
 		}
+		sum += atoi(argv[argc]);
 	}
 	printf("%d\n", sum);
 	return (0);
