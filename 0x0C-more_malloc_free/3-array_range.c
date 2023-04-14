@@ -19,7 +19,7 @@ int *array_range(int min, int max)
 	}
 
 	/*calculate length*/
-	length = max - (min + 1);
+	length = max - min + 1;
 
 	/*allocates memory*/
 	poi = malloc(length * sizeof(int));
