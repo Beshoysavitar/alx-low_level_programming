@@ -9,9 +9,9 @@
   */
 int main(int argc, char *argv[])
 {
-	int (*op)(int,int), a, a;
+	int (*op)(int,int), a, b;
 
-	if (argc !=4)
+	if (argc != 4)
 		printf("Error\n"), exit(98);
 
 	a = atoi(argv[1]);
