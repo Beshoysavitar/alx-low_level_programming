@@ -9,7 +9,7 @@
   */
 int main(int argc, char *argv[])
 {
-	int (*op)(int,int), a, b;
+	int (*op)(int, int), a, b;
 
 	if (argc != 4)
 		printf("Error\n"), exit(98);
