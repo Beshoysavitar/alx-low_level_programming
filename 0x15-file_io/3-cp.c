@@ -24,7 +24,6 @@ if (argc != 3)
 dprintf(STDERR_FILENO, "Usage: cp file_from file_to\n");
 exit(97);
 }
-
 fd_from = open(argv[1], O_RDONLY);
 if (fd_from == -1)
 {
@@ -55,12 +54,10 @@ dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_from);
 close(fd_to);
 exit(100);
 }
-
 if (close(fd_to) == -1)
 {
 dprintf(STDERR_FILENO, "Error: Can't close fd %d\n", fd_to);
 exit(100);
 }
-
 return (0);
 }
