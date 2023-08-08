@@ -8,9 +8,7 @@
  */
 int create_file(const char *filename, char *text_content)
 {
-	int open = open(filename, O_CREAT | O_RDWR | O_TRUNC, 0600);
-	int write = write(o, text_content, len);
-	int l = 0;
+	int op, wr, l;
 
 	if (filename == NULL)
 		return (-1);
@@ -20,11 +18,13 @@ int create_file(const char *filename, char *text_content)
 		for (l = 0; text_content[l];)
 			l++;
 	}
+	op = open(filename, O_CREAT | O_RDWR | O_TRUNC, 0600);
+	wr = write(op, text_content, l);
 
-	if (open == -1 || write == -1)
+	if (op == -1 || wr == -1)
 		return (-1);
 
-	close(open);
+	close(op);
 
 	return (1);
 }
