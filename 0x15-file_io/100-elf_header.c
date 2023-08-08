@@ -14,9 +14,23 @@ void print_abi(unsigned char *i);
 void p_o(unsigned char *i);
 void p_t(unsigned int e_type, unsigned char *i);
 void p_ent(unsigned long int e_entry, unsigned char *i);
-void c_e(int elf);
+void c_elf(int elf);
 
-
+/**
+ * c_elf - Closes an ELF file.
+ * @elf: The file descriptor of the ELF file.
+ *
+ * Description: If the file cannot be closed - exit code 98.
+ */
+void c_elf(int elf)
+{
+	if (close(elf) == -1)
+	{
+		dprintf(STDERR_FILENO,
+			"Error: Can't close fd %d\n", elf);
+		exit(98);
+	}
+}
 
 /**
  * p_m - Prints the magic numbers of an ELF header.
@@ -40,29 +54,30 @@ void p_m(unsigned char *i)
 			printf(" ");
 	}
 }
-/**
- * c_e - Checks if a file is an ELF file.
- * @i: A pointer to an array containing the ELF magic numbers.
- *
- * Description: If the file is not an ELF file - exit code 98.
- */
-void c_e(unsigned char *i)
-{
-	int index;
 
-	for (index = 0; index < 4; index++)
+/**
+ * p_c - Prints the class of an ELF header.
+ * @i: A pointer to an array containing the ELF class.
+ */
+void p_c(unsigned char *i)
+{
+	printf("  Class:                             ");
+
+	switch (i[EI_CLASS])
 	{
-		if (i[index] != 127 &&
-		    i[index] != 'E' &&
-		    i[index] != 'L' &&
-		    i[index] != 'F')
-		{
-			dprintf(STDERR_FILENO, "Error: Not an ELF file\n");
-			exit(98);
-		}
+	case ELFCLASSNONE:
+		printf("none\n");
+		break;
+	case ELFCLASS32:
+		printf("ELF32\n");
+		break;
+	case ELFCLASS64:
+		printf("ELF64\n");
+		break;
+	default:
+		printf("<unknown: %x>\n", i[EI_CLASS]);
 	}
 }
-
 
 /**
  * p_d - Prints the data of an ELF header.
@@ -88,26 +103,25 @@ void p_d(unsigned char *i)
 	}
 }
 /**
- * p_c - Prints the class of an ELF header.
- * @i: A pointer to an array containing the ELF class.
+ * c_e - Checks if a file is an ELF file.
+ * @i: A pointer to an array containing the ELF magic numbers.
+ *
+ * Description: If the file is not an ELF file - exit code 98.
  */
-void p_c(unsigned char *i)
+void c_e(unsigned char *i)
 {
-	printf("  Class:                             ");
+	int index;
 
-	switch (i[EI_CLASS])
+	for (index = 0; index < 4; index++)
 	{
-	case ELFCLASSNONE:
-		printf("none\n");
-		break;
-	case ELFCLASS32:
-		printf("ELF32\n");
-		break;
-	case ELFCLASS64:
-		printf("ELF64\n");
-		break;
-	default:
-		printf("<unknown: %x>\n", i[EI_CLASS]);
+		if (i[index] != 127 &&
+		    i[index] != 'E' &&
+		    i[index] != 'L' &&
+		    i[index] != 'F')
+		{
+			dprintf(STDERR_FILENO, "Error: Not an ELF file\n");
+			exit(98);
+		}
 	}
 }
 /**
@@ -130,17 +144,6 @@ void p_v(unsigned char *i)
 	}
 }
 
-
-
-/**
- * print_abi - Prints the ABI version of an ELF header.
- * @i: A pointer to an array containing the ELF ABI version.
- */
-void print_abi(unsigned char *i)
-{
-	printf("  ABI Version:                       %d\n",
-	       i[EI_ABIVERSION]);
-}
 /**
  * p_o - Prints the OS/ABI of an ELF header.
  * @i: A pointer to an array containing the ELF version.
@@ -185,6 +188,17 @@ void p_o(unsigned char *i)
 		printf("<unknown: %x>\n", i[EI_OSABI]);
 	}
 }
+
+/**
+ * print_abi - Prints the ABI version of an ELF header.
+ * @i: A pointer to an array containing the ELF ABI version.
+ */
+void print_abi(unsigned char *i)
+{
+	printf("  ABI Version:                       %d\n",
+	       i[EI_ABIVERSION]);
+}
+
 /**
  * p_t - Prints the type of an ELF header.
  * @e_type: The ELF type.
@@ -242,21 +256,7 @@ void p_ent(unsigned long int e_entry, unsigned char *i)
 		printf("%#lx\n", e_entry);
 }
 
-/**
- * c_e - Closes an ELF file.
- * @elf: The file descriptor of the ELF file.
- *
- * Description: If the file cannot be closed - exit code 98.
- */
-void c_e(int elf)
-{
-	if (close(elf) == -1)
-	{
-		dprintf(STDERR_FILENO,
-			"Error: Can't close fd %d\n", elf);
-		exit(98);
-	}
-}
+
 
 /**
  * main - Displays the information contained in the
@@ -283,7 +283,7 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 	header = malloc(sizeof(Elf64_Ehdr));
 	if (header == NULL)
 	{
-		c_e(o);
+		c_elf(o);
 		dprintf(STDERR_FILENO, "Error: Can't read file %s\n", argv[1]);
 		exit(98);
 	}
@@ -291,7 +291,7 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 	if (r == -1)
 	{
 		free(header);
-		c_e(o);
+		c_elf(o);
 		dprintf(STDERR_FILENO, "Error: `%s`: No such file\n", argv[1]);
 		exit(98);
 	}
@@ -308,6 +308,6 @@ int main(int __attribute__((__unused__)) argc, char *argv[])
 	p_ent(header->e_entry, header->i);
 
 	free(header);
-	c_e(o);
+	c_elf(o);
 	return (0);
 }
