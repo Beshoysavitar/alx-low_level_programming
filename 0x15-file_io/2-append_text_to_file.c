@@ -1,4 +1,5 @@
 #include "main.h"
+size_t _strlen(char *s);
 /**
  * append_text_to_file - ***
  * @filename: ***
