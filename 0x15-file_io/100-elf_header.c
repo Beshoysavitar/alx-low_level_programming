@@ -19,6 +19,15 @@ int main(int argc, char *argv[]) {
 
   Elf64_Ehdr elf_header;
 
+  // Check if the file is an ELF file
+  if (elf_header.e_ident[EI_MAG0] != ELFMAG0 ||
+      elf_header.e_ident[EI_MAG1] != ELFMAG1 ||
+      elf_header.e_ident[EI_MAG2] != ELFMAG2 ||
+      elf_header.e_ident[EI_MAG3] != ELFMAG3) {
+    fprintf(stderr, "File is not an ELF file\n");
+    exit(98);
+  }
+
   // Seek to the start of the ELF header
   if (lseek(fd, 0, SEEK_SET) != 0) {
     perror("lseek");
@@ -32,14 +41,15 @@ int main(int argc, char *argv[]) {
   }
 
   // Print the ELF header information
-  printf("Magic: %#x\n", elf_header.e_ident[EI_MAG0]);
-  printf("Class: %d\n", elf_header.e_class);
-  printf("Data: %d\n", elf_header.e_data);
-  printf("Version: %d\n", elf_header.e_version);
-  printf("OS/ABI: %#x\n", elf_header.e_osabi);
-  printf("ABI Version: %d\n", elf_header.e_abiversion);
-  printf("Type: %d\n", elf_header.e_type);
-  printf("Entry point address: %#x\n", elf_header.e_entry);
+  printf("ELF Header:\n");
+  printf("  Magic: %#x\n", elf_header.e_ident[EI_MAG0]);
+  printf("  Class: %d\n", elf_header.e_class);
+  printf("  Data: %d\n", elf_header.e_data);
+  printf("  Version: %d\n", elf_header.e_version);
+  printf("  OS/ABI: %#x\n", elf_header.e_osabi);
+  printf("  ABI Version: %d\n", elf_header.e_abiversion);
+  printf("  Type: %d\n", elf_header.e_type);
+  printf("  Entry point address: %#x\n", elf_header.e_entry);
 
   close(fd);
   return 0;
